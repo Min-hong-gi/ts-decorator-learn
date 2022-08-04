@@ -1,9 +1,7 @@
 import { App } from "../type/App.js";
 export function AppCore(constructor) {
-    console.log(2);
     return class extends constructor {
         constructor(...args) {
-            console.log(3);
             super(...args);
             applyMixins(App, [constructor]);
             mergeController(this);

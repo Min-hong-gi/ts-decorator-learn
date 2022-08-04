@@ -10,14 +10,18 @@ type ControllersTypes = {
 export interface App extends ControllersTypes {}
 
 export class App {
-  constructor() {
-    console.log(1);
+  constructor(args?: { [k in keyof typeof Controllers]: any }) {
     globalThis.app = this;
-    this.createControllers();
+    this.createControllers(args);
+    this.renderStart();
   }
-  private createControllers() {
+  private createControllers(args?: { [k: string]: any }) {
     Object.keys(Controllers).forEach((x) => {
-      new Controllers[x as keyof typeof Controllers]();
+      if (args && args[x]) {
+        new Controllers[x as keyof typeof Controllers](args[x]);
+      } else {
+        new Controllers[x as keyof typeof Controllers]();
+      }
     });
   }
 }

@@ -23,7 +23,12 @@ export default class Pointer2D {
     this.y /= val;
     return this;
   }
-  normalize() {
+  mag() {
     return Math.sqrt(this.x*this.x + this.y*this.y);
+  }
+  normalize() {
+    const m = this.mag();
+    this.avg(m);
+    return this;
   }
 }

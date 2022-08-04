@@ -5,10 +5,8 @@ export interface Controller {}
 export function AppCore<T extends { new (...args: any[]): {} }>(
   constructor: T
 ) {
-  console.log(2);
   return class extends constructor implements Controller {
     constructor(...args: any[]) {
-      console.log(3);
       super(...args);
       applyMixins(App, [constructor]);
 

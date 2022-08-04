@@ -1,4 +1,5 @@
-import DrawObject from "../../model/drawObject.js";
+import DrawObject from "../../drawLib/model/drawObject.js";
+import { vh, vw } from "../../drawLib/util/viewSize.js";
 import { AppCore } from "../core/AppCoreDecorator.js";
 
 @AppCore
@@ -6,27 +7,40 @@ export class DrawController {
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
   private renderObjects: Array<DrawObject> = [];
+  private renderFrame = 1000/60;
 
-  constructor() {
-    console.log(4);
-    this.setCanvas();
+  get frame(): number {
+    return this.renderFrame;
   }
-  setCanvas() {
+  set frame(frame: number) {
+    this.renderFrame = frame;
+  }
+
+  constructor(background?: string) {
+    this.setCanvas(background);
+  }
+  get context() {
+    return this.ctx;
+  }
+  setCanvas(background: string = "#fff") {
     this.canvas = document.querySelector("canvas")!;
     this.ctx = this.canvas.getContext("2d")!;
 
     this.canvas.width = this.canvas.clientWidth * 2;
     this.canvas.height = this.canvas.clientHeight * 2;
 
+    this.canvas.style.backgroundColor = background;
+
     this.ctx.scale(2, 2);
   }
-  render() {
-    setInterval(() => {
-      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+  renderStart() {
+    setTimeout(() => {
+      this.ctx.clearRect(-vw(100), -vh(100), vw(100)*2, vh(100)*2);
       this.renderObjects.forEach((x) => {
         x.draw(this.ctx);
       });
-    }, 1000 / 60);
+      this.renderStart();
+    }, this.frame);
   }
   get canvasWidth() {
     return this.canvas.width / 2;

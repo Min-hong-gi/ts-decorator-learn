@@ -1,13 +1,18 @@
 import * as Controllers from "../controllers/controller.export.js";
 export class App {
-    constructor() {
-        console.log(1);
+    constructor(args) {
         globalThis.app = this;
-        this.createControllers();
+        this.createControllers(args);
+        this.renderStart();
     }
-    createControllers() {
+    createControllers(args) {
         Object.keys(Controllers).forEach((x) => {
-            new Controllers[x]();
+            if (args && args[x]) {
+                new Controllers[x](args[x]);
+            }
+            else {
+                new Controllers[x]();
+            }
         });
     }
 }

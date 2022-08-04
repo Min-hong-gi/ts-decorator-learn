@@ -4,29 +4,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+import { vh, vw } from "../../drawLib/util/viewSize.js";
 import { AppCore } from "../core/AppCoreDecorator.js";
 let DrawController = class DrawController {
     canvas;
     ctx;
     renderObjects = [];
-    constructor() {
-        console.log(4);
-        this.setCanvas();
+    renderFrame = 1000 / 60;
+    get frame() {
+        return this.renderFrame;
     }
-    setCanvas() {
+    set frame(frame) {
+        this.renderFrame = frame;
+    }
+    constructor(background) {
+        this.setCanvas(background);
+    }
+    get context() {
+        return this.ctx;
+    }
+    setCanvas(background = "#fff") {
         this.canvas = document.querySelector("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = this.canvas.clientWidth * 2;
         this.canvas.height = this.canvas.clientHeight * 2;
+        this.canvas.style.backgroundColor = background;
         this.ctx.scale(2, 2);
     }
-    render() {
-        setInterval(() => {
-            this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    renderStart() {
+        setTimeout(() => {
+            this.ctx.clearRect(-vw(100), -vh(100), vw(100) * 2, vh(100) * 2);
             this.renderObjects.forEach((x) => {
                 x.draw(this.ctx);
             });
-        }, 1000 / 60);
+            this.renderStart();
+        }, this.frame);
     }
     get canvasWidth() {
         return this.canvas.width / 2;
