@@ -8,28 +8,19 @@ export function AppCore<T extends { new (...args: any[]): {} }>(
   return class extends constructor implements Controller {
     constructor(...args: any[]) {
       super(...args);
-      applyMixins(App, [constructor]);
 
-      mergeController(this);
+      mergeController(constructor.name, this);
     }
   };
 }
 
-function mergeController(controller: Controller){
-  Object.keys(controller).forEach(x=>{
-    globalThis.app[x as keyof typeof controller] = controller[x as keyof typeof controller];
-  })
-}
-
-function applyMixins(derivedCtor: any, constructors: any[]) {
-  constructors.forEach((baseCtor) => {
-    Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-      Object.defineProperty(
-        derivedCtor.prototype,
-        name,
-        Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ||
-          Object.create(null)
-      );
-    });
-  });
+function mergeController(name: string, controller: Controller) {
+  if (globalThis.app[name as keyof App]) {
+    globalThis.app[name as keyof App] = {
+      ...globalThis.app[name as keyof App],
+      ...(controller as any),
+    };
+  } else {
+    globalThis.app[name as keyof App] = controller as any;
+  }
 }

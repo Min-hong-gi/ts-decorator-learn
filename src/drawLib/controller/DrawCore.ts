@@ -3,7 +3,7 @@ import { vh, vw } from "../util/viewSize.js";
 import { AppCore } from "../../App/core/AppCoreDecorator.js";
 
 @AppCore
-export class DrawController {
+export class DrawCore {
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
   private renderObjects: Array<DrawObject> = [];
@@ -16,13 +16,13 @@ export class DrawController {
     this.renderFrame = frame;
   }
 
-  constructor(background?: string) {
+  constructor(background: string = '#fff') {
     this.setCanvas(background);
   }
   get context() {
     return this.ctx;
   }
-  setCanvas(background: string = "#fff") {
+  setCanvas(background: string) {
     this.canvas = document.querySelector("canvas")!;
     this.ctx = this.canvas.getContext("2d")!;
 
@@ -58,5 +58,3 @@ export class DrawController {
     }
   }
 }
-
-export interface DrawController {}

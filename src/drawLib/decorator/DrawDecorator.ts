@@ -9,7 +9,7 @@ export function Draw<T extends { new (...args: any[]): DrawObject }>(
   return class extends constructor {
     constructor(...args: any[]) {
       super(...args);
-      globalThis.app.addRenderObject(this);
+      globalThis.app.DrawCore.addRenderObject(this);
     }
   };
 }
@@ -25,9 +25,9 @@ export function setRender<T extends DrawObject>(isRender: boolean) {
   ) {
     descriptor.value = function () {
       if(isRender) {
-        globalThis.app.addRenderObject(this as T);
+        globalThis.app.DrawCore.addRenderObject(this as T);
       }else {
-        globalThis.app.removeRenderObject(this as T);
+        globalThis.app.DrawCore.removeRenderObject(this as T);
       }
     };
   };

@@ -1,26 +1,27 @@
 import * as Controllers from "../controllers/controller.export.js";
 
-type controllerPropertyType = {
-  [k in keyof typeof Controllers[keyof typeof Controllers]]: typeof Controllers[keyof typeof Controllers][k];
+type ControllersType = {
+  [k in keyof typeof Controllers]: typeof Controllers[k];
+};
+type Cores = {
+  [k in keyof ControllersType]: typeof Controllers[k][keyof ControllersType[keyof ControllersType]];
 };
 
-type ControllersTypes = {
-  [k in keyof controllerPropertyType[keyof controllerPropertyType]]: controllerPropertyType[keyof controllerPropertyType][k];
-};
-export interface App extends ControllersTypes {}
+export interface App extends Cores {}
 
 export class App {
-  constructor(args?: { [k in keyof typeof Controllers]: any }) {
+  constructor(args?: { [k in keyof typeof Controllers]?: any }) {
     globalThis.app = this;
     this.createControllers(args);
-    this.renderStart();
   }
   private createControllers(args?: { [k: string]: any }) {
     Object.keys(Controllers).forEach((x) => {
+      const key = x as keyof typeof Controllers;
       if (args && args[x]) {
-        new Controllers[x as keyof typeof Controllers](args[x]);
+        new Controllers[key](args[key]);
       } else {
-        new Controllers[x as keyof typeof Controllers]();
+        const temp = Controllers as any;
+        new temp[key]();
       }
     });
   }
