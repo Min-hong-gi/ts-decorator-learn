@@ -1,6 +1,6 @@
-import DrawObject from "../../drawLib/model/drawObject.js";
-import { vh, vw } from "../../drawLib/util/viewSize.js";
-import { AppCore } from "../core/AppCoreDecorator.js";
+import DrawObject from "../model/drawObject.js";
+import { vh, vw } from "../util/viewSize.js";
+import { AppCore } from "../../App/core/AppCoreDecorator.js";
 
 @AppCore
 export class DrawController {

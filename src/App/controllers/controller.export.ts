@@ -1,1 +1,1 @@
-export { DrawController } from './DrawController.js';
+export { DrawController } from '../../drawLib/controller/DrawController.js';
